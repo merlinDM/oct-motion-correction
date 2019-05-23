@@ -8,7 +8,9 @@ This repo contains code for my masters thesis. Project is aimed to provide a sol
 * **phantom.mlx** Shows how to apply saccadic motion to test data;
 * **generate_saccades.m** Generates random parameters for the eye movement model;
 * **origin_movement.m** Produces vector of origin positions in time for given parameters.
-* **saccades_spiral.m** Generates saccadic movement using random points on logarythmic spiral. Turned out to be too uncontrolable for our purposes.
+* **displacement_field_2d.m** Transform origin movement into Displacement field **m** x **n** x **2** matrix.
+* **displacement_field_3d.m** Transform origin movement into Displacement field **m** x **n** x **p** x **3** matrix.
+* **scripts.m** Examples and usefull scripts.
 
 ### Usage
 
@@ -18,7 +20,7 @@ First, checkout project. In MATLAB, type into command line:
 >> run 'phantom.mlx'
 ```
 
-In 2016a it's impossible to make animation in Live Scripts. To see original image use (Ctrl+C to stop):
+In 2016a it's impossible to make animation in Live Scripts. To see original image use those commands (Ctrl+C in command window to stop):
 ```matlab
 >> fps = 10;
 >> pause on;
@@ -37,6 +39,8 @@ To show distorted image:
      (NMAX), (mod(y, NMAX) + 1), (NMIN))
 end;
 ```
+
+Also see **scripts.m**
 
 ### 3rd party projects
 
