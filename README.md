@@ -22,19 +22,19 @@ In 2016a it's impossible to make animation in Live Scripts. To see original imag
 ```matlab
 >> fps = 10;
 >> pause on;
->> for x = 1:1000
+>> for y = 1:1000
  pause(1/fps);
  slice(phantomImage, ...
-     (NMAX), (mod(x, NMAX) + 1), (NMIN))
+     (NMAX), (mod(y, NMAX) + 1), (NMIN))
 end;
 ```
 
 To show distorted image:
 ```matlab
->> for x = 1:1000
+>> for y = 1:1000
  pause(1/fps);
  slice(acquiredImage, ...
-     (NMAX), (mod(x, NMAX) + 1), (NMIN))
+     (NMAX), (mod(y, NMAX) + 1), (NMIN))
 end;
 ```
 

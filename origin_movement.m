@@ -31,8 +31,8 @@ function [ origin ] = origin_movement(saccades, saccadeLength)
         while i < saccadeLength * j
             origin(i + 1).x = origin(i).x - saccade.vx / saccade.lambda ...
                 * exp(-saccade.lambda * (i - timeFromStart));
-            origin(i + 1).y = origin(i).y - saccade.vy / saccade.lambda * ...
-                exp(-saccade.lambda * (i - timeFromStart));
+            origin(i + 1).y = origin(i).y - saccade.vy / saccade.lambda ...
+                * exp(-saccade.lambda * (i - timeFromStart));
             i = i + 1;
         end;
     end;
