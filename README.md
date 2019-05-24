@@ -14,28 +14,33 @@ This repo contains code for my masters thesis. Project is aimed to provide a sol
 
 ### Usage
 
-First, checkout project. In MATLAB, type into command line:
-```matlab
->> cd '/path/to/project/'
->> run 'phantom.mlx'
+First, checkout project.
+```bash
+$ git clone https://github.com/merlinDM/oct-motion-correction.git
 ```
 
-In 2016a it's impossible to make animation in Live Scripts. To see original image use those commands (Ctrl+C in command window to stop):
+Add project to Matlab search path:
+```matlab
+>> cd '/path/to/project/';
+>> addpath(pwd);
+```
+
+Run the example:
+```matlab
+>> run 'phantom.mlx';
+```
+
+In 2016a it's impossible to make animation in Live Scripts. To see original and distorted image use lines (Ctrl+C in command window to stop):
 ```matlab
 >> fps = 10;
 >> pause on;
->> for y = 1:1000
- pause(1/fps);
- slice(phantomImage, ...
+>> for y = 1:100
+    pause(1 / fps);
+    subplot(2,1,1);
+    slice(acquiredImageXFast, ...
      (NMAX), (mod(y, NMAX) + 1), (NMIN))
-end;
-```
-
-To show distorted image:
-```matlab
->> for y = 1:1000
- pause(1/fps);
- slice(acquiredImage, ...
+    subplot(2,1,2);
+    slice(acquiredImageYFast, ...
      (NMAX), (mod(y, NMAX) + 1), (NMIN))
 end;
 ```
