@@ -1,4 +1,4 @@
-function [ D ] = displacement_field_3d(origin, m, n, p, fastAxis)
+function [ D ] = displacementField3d(origin, m, n, p, fastAxis)
     
     if nargin < 5
         fastAxis = 'xfast';

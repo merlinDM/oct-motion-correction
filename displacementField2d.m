@@ -1,4 +1,4 @@
-function [ D ] = displacement_field_2d(origin, m, n, fastAxis)
+function [ D ] = displacementField2d(origin, m, n, fastAxis)
     if nargin < 4
         fastAxis = 'xfast';
     end

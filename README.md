@@ -4,12 +4,12 @@ This repo contains code for my masters thesis. Project is aimed to provide a sol
 
 ### Structure
 
-* **saccades.mlx** Contains info about how eye movements were modeled;
-* **phantom.mlx** Shows how to apply saccadic motion to test data;
-* **generate_saccades.m** Generates random parameters for the eye movement model;
-* **origin_movement.m** Produces vector of origin positions in time for given parameters.
-* **displacement_field_2d.m** Transform origin movement into Displacement field **m** x **n** x **2** matrix.
-* **displacement_field_3d.m** Transform origin movement into Displacement field **m** x **n** x **p** x **3** matrix.
+* **saccadesModeling.mlx** Contains info about how eye movements were modeled;
+* **phantomModeling.mlx** Shows how to apply saccadic motion to test data;
+* **generateSaccades.m** Generates random parameters for the eye movement model;
+* **originMovement.m** Produces vector of origin positions in time for given parameters.
+* **displacementField2d.m** Transform origin movement into Displacement field **m** x **n** x **2** matrix.
+* **displacementField3d.m** Transform origin movement into Displacement field **m** x **n** x **p** x **3** matrix.
 * **scripts.m** Examples and usefull scripts.
 
 ### Usage

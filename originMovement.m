@@ -1,4 +1,4 @@
-function [ origin ] = origin_movement(saccades, saccadeLength)
+function [ origin ] = originMovement(saccades, saccadeLength)
 
     if nargin == 1
         saccadeLength = 100;
@@ -12,7 +12,7 @@ function [ origin ] = origin_movement(saccades, saccadeLength)
     if ~istable(saccades)
         msgID = 'OCT:BadArguments';
         msg   = 'First argument should be table with generated ' + ...
-                'saccades parameters, see generate_saccades';
+                'saccades parameters, see generateSaccades';
         ex    = MException(msgID, msg);
         throw(ex);
     end

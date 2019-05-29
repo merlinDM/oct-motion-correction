@@ -1,4 +1,4 @@
-function [ saccades ] = generate_saccades(timePeriod, ...
+function [ saccades ] = generateSaccades(timePeriod, ...
                                           saccadeLength, ...
                                           generatorTpe)
     if nargin < 3
@@ -24,11 +24,11 @@ function [ saccades ] = generate_saccades(timePeriod, ...
     
     switch generatorTpe
         case 'ellipse'
-            generator = @generate_ellipse_velosities;
+            generator = @generateEllipseVelosities;
         case 'spiral'
-            generator = @generate_spiral_velosities;
+            generator = @generateSpiralVelosities;
         case 'periodic'
-            generator = @generate_periodic_velosities;
+            generator = @generatePeriodicVelosities;
         otherwise
             msgID = 'OCT:BadArguments';
             msg   = 'Generator type should be one of ';
@@ -40,18 +40,18 @@ function [ saccades ] = generate_saccades(timePeriod, ...
     saccadesNumber = ceil(timePeriod / saccadeLength);
     
     saccades_velocities = generator(saccadesNumber);
-    saccades_lambda = generate_lambdas(saccadesNumber);
+    saccades_lambda = generateLambdas(saccadesNumber);
 
     saccades = [saccades_velocities saccades_lambda];
 
-    saccadeConstants = [60 60 100];
+    saccadeConstants = [420 420 100];
     saccadeConstants = repmat(saccadeConstants, saccadesNumber, 1);
 
     saccades = array2table(saccades.*saccadeConstants, ...
         'VariableNames', {'vx', 'vy', 'lambda'});
 end
 
-function [ velocities ] = generate_periodic_velosities(saccadesNumber)
+function [ velocities ] = generatePeriodicVelosities(saccadesNumber)
     vx = p_generate_periodic_velosities(saccadesNumber, 'x');
     vy = p_generate_periodic_velosities(saccadesNumber, 'y');
     velocities = [vx vy];
@@ -74,18 +74,17 @@ function [ velocities ] = p_generate_periodic_velosities(saccadesNumber, axis)
     N = ceil(saccadesNumber / periodSize) * periodSize;
     periods = repmat(period, 1, floor(N / periodSize))';
     
-    randomVelocities = (rand(N, 1) + 1) / 2;
+    randomVelocities = rand(N, 1) / 2;
     periodicVelocities = randomVelocities .* periods;
     velocities = periodicVelocities(1:saccadesNumber);
 end
 
-% 0..4
-function [ velocities ] = generate_spiral_velosities(saccadesNumber)
-    a = 1; b = 1.1; c = 1/20;
-    fx = @(t) a * exp(b * t) * sin((t - 1) / c);
-    fy = @(t) a * exp(b * t) * cos((t - 1) / c);
+function [ velocities ] = generateSpiralVelosities(saccadesNumber)
+    a = 0.5; b = 0.1; c = 1 / pi;
+    fx = @(t) a * exp(b * (t - 2)) * sin((t - 2) / c);
+    fy = @(t) a * exp(b * (t - 2)) * cos((t - 2) / c);
     
-    randomVelocities = rand(saccadesNumber, 1) / 2;
+    randomVelocities = rand(saccadesNumber, 1) * 2 - 1;
 
     vx = arrayfun(fx, randomVelocities);
     vy = arrayfun(fy, randomVelocities);
@@ -95,7 +94,7 @@ function [ velocities ] = generate_spiral_velosities(saccadesNumber)
 end
 
 % 0.0..0.5
-function [ velocities ] = generate_ellipse_velosities(saccadesNumber)
+function [ velocities ] = generateEllipseVelosities(saccadesNumber)
     a = 0.5; 
     e = 0.8;
     b = sqrt(a ^ 2 * (1 - e ^ 2));
@@ -122,6 +121,6 @@ function [ velocities ] = generate_ellipse_velosities(saccadesNumber)
 end
 
 % 0.8..0.9
-function [ lambdas ] = generate_lambdas( saccadesNumber )
+function [ lambdas ] = generateLambdas(saccadesNumber)
     lambdas = 1 - (rand(saccadesNumber, 1) + 1) / 10;
 end
