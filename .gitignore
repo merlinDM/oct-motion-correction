@@ -20,3 +20,6 @@ octave-workspace
 
 # Simulink autosave extension
 .autosave
+
+# Windows thumbnail cache
+Thumbs.db
