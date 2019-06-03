@@ -281,4 +281,17 @@ end
 selectedTpe = {'raw'}; 
 selectedIndex = cellfun(@(x) any(strcmp(x, selectedTpe)), {data.tpe});
 selectedData = data(selectedIndex);
-%%
+%% Execute custom registration
+import thirdparty.lbfgs.fminlbfgs
+data = loadExperimentData(2);
+right = data(1).value;
+left = data(7).value;
+
+scale = [1 1 1 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01];
+par = [0 0 0 0 0 0 100 100 100 0 0 0 0 0 0];
+
+[metric] = simularityMetric(left, right, scale);
+metric(par);
+% [x,fval] = fminunc(metric,par);
+[x,fval] = fminlbfgs(metric,par);
+

@@ -15,8 +15,9 @@ This repo contains code for my masters thesis. Project is aimed to provide a sol
 **displacementField3d.m** | Transform origin movement into Displacement field  **m** x **n** x **p** x **3** matrix.
 **scripts.m** | Examples and usefull scripts.
 **loadExperiment.m** | Loads data from  resources according to the specified experiment index.
-**registerExperiment** | Applies imregister to all distorted images in experiment. Returns raw data, registered image and ssim scores array; the last element of the array is registered image score.
-**visualize3d** | Constructs animated view of 3D matrices.
+**registerExperiment.m** | Applies imregister to all distorted images in experiment. Returns raw data, registered image and ssim scores array; the last element of the array is registered image score.
+**visualize3d.m** | Constructs animated view of 3D matrices.
+**computeSSIM.m** | Implements image registration metric for optimization.
 
 ### Usage
 
@@ -47,5 +48,11 @@ Also see **scripts.m**.
 
 Matlab 2019a with Image Processing Toolbox installed.
 
-Uses 3D Shepp-Logan phantom project, see /thirdparty/phantom3d/
+Matthias Schabel, 3D Shepp-Logan phantom project, **/+thirdparty/+phantom3d/**
 https://www.mathworks.com/matlabcentral/fileexchange/9416-3d-shepp-logan-phantom
+
+Dirk-Jan Kroon, FMINLBFGS: Fast Limited Memory Optimizer, **/+thirdparty/+lbfgs/**
+https://www.mathworks.com/matlabcentral/fileexchange/23245-fminlbfgs-fast-limited-memory-optimizer
+
+Some matrix functions by Dirk-Jan Kroon from Finite Iterative Closest Point, **/+thirdparty/+dkroon/**
+https://www.mathworks.com/matlabcentral/fileexchange/24301-finite-iterative-closest-point
