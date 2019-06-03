@@ -23,3 +23,6 @@ octave-workspace
 
 # Windows thumbnail cache
 Thumbs.db
+
+# Intellij Idea directory
+.idea/
