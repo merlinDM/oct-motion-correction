@@ -4,7 +4,7 @@ This repo contains code for my masters thesis. Project is aimed to provide a sol
 
 ### Structure
 
-|File|description|
+|File|Description|
 |---|---|
 **saccadesModeling.mlx** | Contains info about how eye movements were modeled.
 **phantomModeling.mlx** | Shows how to apply saccadic motion to test data.
@@ -18,6 +18,8 @@ This repo contains code for my masters thesis. Project is aimed to provide a sol
 **registerExperiment.m** | Applies imregister to all distorted images in experiment. Returns raw data, registered image and ssim scores array; the last element of the array is registered image score.
 **visualize3d.m** | Constructs animated view of 3D matrices.
 **computeSSIM.m** | Implements image registration metric for optimization.
+**vectorToAffine3d.m** | Translates 1x7 vector to affine3d class instance.
+**interpolateImage.m** | Interpolates warpped image before comparing it with reference one.
 
 ### Usage
 

@@ -283,15 +283,36 @@ selectedIndex = cellfun(@(x) any(strcmp(x, selectedTpe)), {data.tpe});
 selectedData = data(selectedIndex);
 %% Execute custom registration
 import thirdparty.lbfgs.fminlbfgs
+import thirdparty.dkroon.getransformation_matrix
+
 data = loadExperimentData(2);
-right = data(1).value;
-left = data(7).value;
+raw = data(1).value;
+rawRef = imref3d(size(raw));
+distorted = data(4).value;
 
-scale = [1 1 1 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01];
-par = [0 0 0 0 0 0 100 100 100 0 0 0 0 0 0];
+% starting position
+scale = [1 1 1 0.01 0.01 0.01 0.01 0.01 0.01];
+par =   [0 0 0 0    0    0    0    0    0];
 
-[metric] = simularityMetric(left, right, scale);
+[metric] = simularityMetric(distorted, raw, scale);
 metric(par);
 % [x,fval] = fminunc(metric,par);
-[x,fval] = fminlbfgs(metric,par);
+opts = struct('Display','final','HessUpdate','lbfgs','GoalsExactAchieve',1,'GradConstr',false,  ...
+    'TolX',1e-8,'TolFun',1e-8,'GradObj','off','MaxIter',400,'MaxFunEvals',100*numel(par)-1,  ...
+    'DiffMaxChange',1e-1,'DiffMinChange',1e-8,'OutputFcn',[], ...
+    'rho',0.0100,'sigma',0.900,'tau1',3,'tau2', 0.1, 'tau3', 0.5,'StoreN',20);
 
+[x,fval] = fminlbfgs(metric,par,opts);
+
+startSSIM = ssim(raw, distorted);
+
+T = vectorToAffine3d(x, scale);
+
+warped = imwarp(distorted, T);
+resized = interpolateImage(warped, rawRef);
+
+finalSSIM = ssim(raw, resized);
+
+% view results:
+[startSSIM finalSSIM]
+% visualize3d(raw, distorted, resized)
