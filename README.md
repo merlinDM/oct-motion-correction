@@ -9,17 +9,12 @@ This repo contains code for my masters thesis. Project is aimed to provide a sol
 **saccadesModeling.mlx** | Contains info about how eye movements were modeled.
 **phantomModeling.mlx** | Shows how to apply saccadic motion to test data.
 **metricsModeling.mxl** | Investigates image quality metrics (terrible) behaviour.
-**generateSaccades.m** | Generates random parameters for the eye movement model.
-**originMovement.m** | Produces vector of origin positions in time for given parameters.
-**displacementField2d.m** | Transform origin movement into Displacement field  **m** x **n** x **2** matrix.
-**displacementField3d.m** | Transform origin movement into Displacement field  **m** x **n** x **p** x **3** matrix.
-**scripts.m** | Examples and usefull scripts.
-**loadExperiment.m** | Loads data from  resources according to the specified experiment index.
-**registerExperiment.m** | Applies imregister to all distorted images in experiment. Returns raw data, registered image and ssim scores array; the last element of the array is registered image score.
-**visualize3d.m** | Constructs animated view of 3D matrices.
-**computeSSIM.m** | Implements image registration metric for optimization.
-**vectorToAffine3d.m** | Translates 1x7 vector to affine3d class instance.
-**interpolateImage.m** | Interpolates warpped image before comparing it with reference one.
+**projectTest.m** | Contains use cases for project.
+**RegistrationObjective.m** | Encapsulates objective function for image registration. 
+**RegistrationProcedure.m** | Loads experiment data from resources and performs registration. 
+**SaccadeGenerator.m** | Generates saccadic movement.
+**ScannigProcedure.m** | Modeles scanning procedure and applies saccadic movement to given original 3D image.
+
 
 ### Usage
 
@@ -44,6 +39,11 @@ In 2019a it's impossible to make animation in Live Scripts. To see original and 
 >> visualize3d(acquiredImageXFast, acquiredImageYFast);
 ```
 
+Registration procedure could be tested using
+```matlab
+>> runtests('projectTest')
+```
+
 Also see **scripts.m**.
 
 ### Requirements
@@ -58,3 +58,9 @@ https://www.mathworks.com/matlabcentral/fileexchange/23245-fminlbfgs-fast-limite
 
 Some matrix functions by Dirk-Jan Kroon from Finite Iterative Closest Point, **/+thirdparty/+dkroon/**
 https://www.mathworks.com/matlabcentral/fileexchange/24301-finite-iterative-closest-point
+
+Deshan Yang, Gaussian Pyramid - Expand and Reduce routines 1D, 2D and 3D, **/+thirdparty/+pyramid/**
+https://www.mathworks.com/matlabcentral/fileexchange/12037-gaussian-pyramid-expand-and-reduce-routines-1d-2d-and-3d
+
+T. Mahmudi, R. Kafieh, H. Rabbani, data from their paper OCT data & Color Fundus Images of Left & Right Eyes of 50 healthy persons
+https://sites.google.com/site/hosseinrabbanikhorasgani/datasets-1/oct-fundus-right-left
