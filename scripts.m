@@ -33,7 +33,7 @@ for k = 1:2:PMAX
     pause(1 / fps);
 end
 %%
-load('C:\Users\lenovo\Documents\MATLAB\patient#1\1_left.mat', 'd3')
+load('/path/to/data/patient#1/1_left.mat', 'd3')
 import thirdparty.pyramid.*
 rd3 = GPReduce(d3);
 rrd3 = GPReduce(rd3);
