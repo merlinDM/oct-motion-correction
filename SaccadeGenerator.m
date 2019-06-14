@@ -1,15 +1,13 @@
 classdef SaccadeGenerator < handle
-    %UNTITLED8 Summary of this class goes here
-    %   Detailed explanation goes here
-    
+
     properties
         timePeriod = 1600;
         saccadeLength = 100;
-        generatorTpe = 'ellipse';
         saccadeConstants = [420 420 100];
     end
     
-    properties(SetAccess = private)
+    properties(Access = private)
+        generatorTpe = 'ellipse';
         generator
     end
     
@@ -79,20 +77,52 @@ classdef SaccadeGenerator < handle
                     i = i + 1;
                 end
             end
-
         end
+    end
+    methods(Static)
+        function [ D ] = originMovementToDisplacementField(origin, m, n, p, fastAxis)
+    
+            if nargin < 5
+                fastAxis = 'xfast';
+            end
+
+            if nargin < 4
+                p = n;
+            end
+
+            if nargin < 3
+                n = m;
+            end
+
+            if ~isfield(origin, 'z')
+                z_movement = zeros(m * n, 1)';
+            else
+                z_movement = origin.z;
+            end
+
+            singleLayer = [origin(1:m*n).x; origin(1:m*n).y; z_movement]';
+            allLayers = repmat(singleLayer, p, 1);
+
+            if strcmp(fastAxis, 'xfast')
+                D = reshape(allLayers, m, n, p, 3);
+            elseif strcmp(fastAxis, 'yfast')
+                DD = reshape(allLayers, n, m, p, 3);
+                D = permute(DD, [2 1 3 4]);
+            end
+        end
+
     end
     
     methods(Access = private, Static)
         
-        function [ velocities ] = generatePeriodicVelosities(obj, saccadesNumber)
-            vx = p_generate_periodic_velosities(saccadesNumber, 'x');
-            vy = p_generate_periodic_velosities(saccadesNumber, 'y');
+        function [ velocities ] = generatePeriodicVelosities(saccadesNumber)
+            vx = pGeneratePeriodicVelosities(saccadesNumber, 'x');
+            vy = pGeneratePeriodicVelosities(saccadesNumber, 'y');
             velocities = [vx vy];
         end
         
         % 0.5..1.0
-        function [ velocities ] = p_generate_periodic_velosities(saccadesNumber, axis)
+        function [ velocities ] = pGeneratePeriodicVelosities(saccadesNumber, axis)
 
             if nargin < 2
                 axis = 'x';
@@ -158,10 +188,6 @@ classdef SaccadeGenerator < handle
         function [ lambdas ] = generateLambdas(saccadesNumber)
             lambdas = 1 - (rand(saccadesNumber, 1) + 1) / 10;
         end
-        
-    end
-    
-    methods(Static)
         
     end
 end

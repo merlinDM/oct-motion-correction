@@ -26,3 +26,6 @@ Thumbs.db
 
 # Intellij Idea directory
 .idea/
+
+# Results that could be reproduced
+/resources/experiment*

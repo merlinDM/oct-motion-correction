@@ -5,7 +5,7 @@ classdef ScannigProcedure < handle
         saccadesAmplitude = 1;
     end
     
-    properties(SetAccess = private)
+    properties(Access = private)
         dimentions;
         xfastConst = 'xfast';
         yfastConst = 'yfast';
@@ -46,7 +46,39 @@ classdef ScannigProcedure < handle
             save(filepath, 'experiment');
         end
         
-        function [data, meta] = loadExperimentData(obj, experimentIndex)
+        function [image] = acquireImage(obj, direction)
+            
+            if nargin < 2
+                direction = obj.xfastConst;
+            end
+            
+            obj.dimentions = ndims(obj.rawImage);
+            [m, n, p] = size(obj.rawImage);
+            
+            saccadeLength = floor(m * n / obj.saccadesPerImage);
+            
+            obj.saccadeGenerator.timePeriod = m * n;
+            obj.saccadeGenerator.saccadeLength = saccadeLength;
+            vx = obj.saccadeGenerator.saccadeConstants(1);
+            vy = obj.saccadeGenerator.saccadeConstants(2);
+            lambda = obj.saccadeGenerator.saccadeConstants(3);
+            obj.saccadeGenerator.saccadeConstants = ... 
+                [vx * obj.saccadesAmplitude, ...
+                 vy * obj.saccadesAmplitude, ...
+                 lambda];
+            
+            saccades = obj.saccadeGenerator.generateSaccades();
+            origin = obj.saccadeGenerator.saccadesToOriginMovement(saccades);            
+            
+            D = obj.saccadeGenerator. ...
+                originMovementToDisplacementField(origin, m, n, p, direction);
+            
+            image = imwarp(obj.rawImage, D);
+        end
+    end
+    
+    methods(Static)
+        function [data, meta] = loadExperimentData(experimentIndex)
 
             folder = strcat('\resources\experiment_', ...
                 sprintf('%02d', experimentIndex), ...
@@ -68,63 +100,6 @@ classdef ScannigProcedure < handle
                     data(i).value = mat.distortedImage;
                     data(i).tpe = 'distorted';
                 end
-            end
-        end
-        
-        function [image] = acquireImage(obj, direction)
-            
-            if nargin < 2
-                direction = obj.xfastConst;
-            end
-            
-            obj.dimentions = ndims(obj.rawImage);
-            [m, n, p] = size(obj.rawImage);
-            
-            saccadeLength = floor(m * n / obj.saccadesPerImage);
-            
-            obj.saccadeGenerator.timePeriod = m * n;
-            obj.saccadeGenerator.saccadeLength = saccadeLength;
-            obj.saccadeGenerator.saccadeConstants = ... 
-                obj.saccadeGenerator.saccadeConstants * obj.saccadesAmplitude;
-            
-            saccades = obj.saccadeGenerator.generateSaccades();
-            origin = obj.saccadeGenerator.saccadesToOriginMovement(saccades);            
-            
-            D = obj.originMovementToDisplacementField(origin, m, n, p, direction);
-            
-            image = imwarp(obj.rawImage, D);
-        end
-    end
-    
-    methods(Access = private)
-        function [ D ] = originMovementToDisplacementField(~, origin, m, n, p, fastAxis)
-    
-            if nargin < 5
-                fastAxis = 'xfast';
-            end
-
-            if nargin < 4
-                p = n;
-            end
-
-            if nargin < 3
-                n = m;
-            end
-
-            if ~isfield(origin, 'z')
-                z_movement = zeros(m * n, 1)';
-            else
-                z_movement = origin.z;
-            end
-
-            singleLayer = [origin(1:m*n).x; origin(1:m*n).y; z_movement]';
-            allLayers = repmat(singleLayer, p, 1);
-
-            if strcmp(fastAxis, 'xfast')
-                D = reshape(allLayers, m, n, p, 3);
-            elseif strcmp(fastAxis, 'yfast')
-                DD = reshape(allLayers, n, m, p, 3);
-                D = permute(DD, [2 1 3 4]);
             end
         end
     end

@@ -1,24 +1,22 @@
 classdef RegistrationProcedure < handle
     
-    
     properties
         transformationMode = 'field';
         optimizationProcedure = @thirdparty.lbfgs.fminlbfgs;
     end
     
     properties(SetAccess = private)
-        registrationObjective;
+        registrationObjective = RegistrationObjective();
         experimentMeta;
         optimizationProcedureOptions;
         startingPoint;
-        scanningProcedure = ScannigProcedure();
     end
     
     methods
         
         function [registered, raw, scores] = registerExperiment(obj, experimentIndex)
             
-            [data, meta] = obj.scanningProcedure.loadExperimentData(experimentIndex);
+            [data, meta] = ScannigProcedure.loadExperimentData(experimentIndex);
             
             obj.experimentMeta = meta;
             
@@ -26,8 +24,6 @@ classdef RegistrationProcedure < handle
             raw = raw.value;
             
             obj.setOptimizationProcedureOptions();
-            
-            obj.registrationObjective = RegistrationObjective();
             
             registered = obj.registerImageArray(listOfMoving);
             
@@ -94,8 +90,12 @@ classdef RegistrationProcedure < handle
             meta = obj.experimentMeta;
             
             if strcmp(obj.transformationMode, 'field')
-                [m, n, ~] = meta.mnp;
-                obj.startingPoint = eye([m, n]);
+                m = meta.mnp(1);
+                n = meta.mnp(2);
+                D = zeros([m, n]);
+                obj.startingPoint = [];
+                obj.startingPoint(:,:,1) = D;
+                obj.startingPoint(:,:,2) = D;
                 
                 obj.optimizationProcedureOptions = struct(...
                     'Display','iter', ...

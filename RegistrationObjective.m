@@ -4,7 +4,7 @@ classdef RegistrationObjective < handle
         fixedImage;
     end
     
-    properties(SetAccess = private)
+    properties(SetAccess = private, GetAccess = public)
         transform;
     end
     
@@ -49,10 +49,9 @@ classdef RegistrationObjective < handle
         end
 
         function f = transformationField(obj)
-            % parVector -- MxN dispacement field matrix
+            % parVector -- MxNx2 dispacement field matrix
             function warped = transformation(parVector)
-                D(:,:,1) = parVector;
-                D(:,:,2) = parVector;
+                D = parVector;
                 warped = imwarp(obj.movingImage, D);
             end
             
